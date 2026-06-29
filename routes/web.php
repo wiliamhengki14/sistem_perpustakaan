@@ -32,3 +32,6 @@ Route::patch('/queue/{queue}/update', [QueueController::class, 'update_queue'])-
 Route::delete('/queue/{queue}/delete', [QueueController::class, 'delete_queue'])->name('delete_queue');
 
 Route::post('/queue/pinjam', [BorrowController::class, 'pinjam'])->name('pinjam');
+Route::get('/borrow', [BorrowController::class, 'index_borrow'])->name('index_borrow');
+Route::get('/borrow/{borrow}/show', [BorrowController::class, 'show_borrow'])->name('show_borow');
+Route::post('/borrow/{borrow}/return', [BorrowController::class, 'kembalikan'])->name('kembalikan');

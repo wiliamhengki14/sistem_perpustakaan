@@ -21,9 +21,9 @@ class BorrowController extends Controller
         }else {
             $borrow = Borrow::create([
                 'user_id' => $user_id,
+                'borrow_code' => 'TRX-'. time(),
                 'borrow_date' => now()->toDateString(),
                 'dua_date' => now()->addDay(7)->toDateString(),
-                'borrow_code' => 'TRX-' . time(),
                 'status' => 'dipinjam',
                 'fine_amount' => 0
             ]);
@@ -32,7 +32,7 @@ class BorrowController extends Controller
                 Borrow_Detail::create([
                     'borrow_id' => $borrow->id,
                     'book_id' => $queue->book->id,
-                    'qty' => $queue->amount,
+                    'qty' => $queue->amount
                 ]);
                 $book_id->update([
                     'stock' => $book_id->stock - $queue->amount
@@ -41,5 +41,24 @@ class BorrowController extends Controller
             }
             return Redirect::back();
         }
+    }
+    public function index_borrow() {
+        $borrows = Borrow::all();
+        return view('index_borrow', compact('borrows'));
+    }
+    public function show_borrow(Borrow $borrow) {
+        $user = Auth::user();
+        if($user->is_admin || $user->id) {
+            return view('show_borrow', compact('borrow'));
+        }
+    }
+    public function kembalikan(Borrow $borrow) {
+        $return_date = $borrow->return_date;
+        if(!$return_date && now()->lessThanOrEqualTo($borrow->dua_date)) {
+            $borrow->update([
+                'return_date' => now()->toDateString()
+            ]);
+        }
+        return Redirect::back();
     }
 }
