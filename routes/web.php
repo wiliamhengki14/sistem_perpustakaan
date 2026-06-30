@@ -35,3 +35,5 @@ Route::post('/queue/pinjam', [BorrowController::class, 'pinjam'])->name('pinjam'
 Route::get('/borrow', [BorrowController::class, 'index_borrow'])->name('index_borrow');
 Route::get('/borrow/{borrow}/show', [BorrowController::class, 'show_borrow'])->name('show_borow');
 Route::post('/borrow/{borrow}/return', [BorrowController::class, 'kembalikan'])->name('kembalikan');
+Route::patch('/borrow/{borrow}/konfirmasi', [BorrowController::class, 'konfirmasi_kembalian'])->name('konfirmasi_kembalian');
+Route::patch('/borrow/{borrow}/denda', [BorrowController::class, 'denda_pembayaran'])->name('denda_pembayaran');

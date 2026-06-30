@@ -7,11 +7,19 @@
     <title>{{ $borrow->borrow_code }}</title>
 </head>
 <body>
+    @php
+        $telatKembali = now()->lessThanOrEqualTo($borrow->dua_date);
+    @endphp
     <p>Peminjam : {{ $borrow->user->name }}</p>
     <p>Kode Pinjam : {{ $borrow->borrow_code }}</p>
     <p>Tanggal Di Pinjam : {{ $borrow->borrow_date }}</p>
     <p>Batas Pinjaman : {{ $borrow->dua_date }}</p>
-    <p>Status : {{ $borrow->status }}</p>
+    @if ($borrow->status == 'pembayaran_denda')
+        <p>Status : {{ $borrow->status }}</p>
+        <p>Denda : Rp{{ number_format($borrow->fine_amount, 0, ',', '.') }}</p>
+    @else
+        <p>Status : {{ $borrow->status }}</p>
+    @endif
     <p>Daftar Buku</p>
     @foreach ($borrow->borrow_details as $borrow_detail)
         <ul>
@@ -20,11 +28,15 @@
             <li>Jumlah : {{ $borrow_detail->qty }}</li>
         </ul>
     @endforeach
-    @if (!$borrow->return_date)
+    @if ($borrow->status == 'dipinjam' && $telatKembali)
         <form action="{{ route('kembalikan', $borrow) }}" method="post">
             @csrf
             <button type="submit">Kembalikan</button>
         </form>
+    @elseif (!$telatKembali && !$borrow->status == 'dikembalikan')
+        <p>Anda terlambat mengembalikan Buku, silahkan lakukan pembayaran di perpustakaan dengan jumlah {{ number_format($borrow->fine_amount, 0, ',', '.') }}</p>
     @endif
+    <br>
+    <a href="{{ route('index_borrow') }}">Kembali</a>
 </body>
 </html>

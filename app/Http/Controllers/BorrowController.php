@@ -23,7 +23,7 @@ class BorrowController extends Controller
                 'user_id' => $user_id,
                 'borrow_code' => 'TRX-'. time(),
                 'borrow_date' => now()->toDateString(),
-                'dua_date' => now()->addDay(7)->toDateString(),
+                'dua_date' => now()->addDay(1)->toDateString(),
                 'status' => 'dipinjam',
                 'fine_amount' => 0
             ]);
@@ -59,6 +59,27 @@ class BorrowController extends Controller
                 'return_date' => now()->toDateString()
             ]);
         }
+        return Redirect::back();
+    }
+    public function konfirmasi_kembalian(Borrow $borrow) {
+        if(now()->lessThanOrEqualTo($borrow->dua_date)) {
+            $borrow->update([
+                'status' => 'dikembalikan'
+            ]);
+        }else {
+            $borrow->update([
+                'status' => 'pembayaran_denda'
+            ]);
+        }
+        return Redirect::route('index_borrow');
+    }
+    public function denda_pembayaran(Borrow $borrow) {
+        $jumlahHariTerlmbat = now()->diffInDays($borrow->dua_date);
+        $denda = $jumlahHariTerlmbat * 10000;
+        $borrow->update([
+            'status' => 'pembayaran_denda',
+            'fine_amount' => $denda
+        ]);
         return Redirect::back();
     }
 }
