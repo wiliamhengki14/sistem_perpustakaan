@@ -28,13 +28,11 @@
             <li>Jumlah : {{ $borrow_detail->qty }}</li>
         </ul>
     @endforeach
-    @if ($borrow->status == 'dipinjam' && $telatKembali)
+    @if (!$borrow->return_date)
         <form action="{{ route('kembalikan', $borrow) }}" method="post">
             @csrf
             <button type="submit">Kembalikan</button>
         </form>
-    @elseif (!$telatKembali && !$borrow->status == 'dikembalikan')
-        <p>Anda terlambat mengembalikan Buku, silahkan lakukan pembayaran di perpustakaan dengan jumlah {{ number_format($borrow->fine_amount, 0, ',', '.') }}</p>
     @endif
     <br>
     <a href="{{ route('index_borrow') }}">Kembali</a>

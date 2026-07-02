@@ -54,9 +54,21 @@ class BorrowController extends Controller
     }
     public function kembalikan(Borrow $borrow) {
         $return_date = $borrow->return_date;
-        if(!$return_date && now()->lessThanOrEqualTo($borrow->dua_date)) {
+        if(now()->lessThanOrEqualTo($borrow->dua_date)) {
             $borrow->update([
                 'return_date' => now()->toDateString()
+            ]);
+        }else {
+            $hariIni = now()->startOfDay();
+            $jumlahBuku = 0;
+            foreach($borrow->borrow_details as $borrowDetail) {
+                $jumlahBuku += $borrowDetail->qty;
+            }
+            $jumlahHariTerlmbat = $hariIni->diffInDays($borrow->dua_date);
+            $fineAmount = abs($jumlahHariTerlmbat * 10000 * $jumlahBuku);
+            $borrow->update([
+                'return_date' => now()->toDateString(),
+                'fine_amount' => $fineAmount
             ]);
         }
         return Redirect::back();
@@ -73,13 +85,14 @@ class BorrowController extends Controller
         }
         return Redirect::route('index_borrow');
     }
-    public function denda_pembayaran(Borrow $borrow) {
-        $jumlahHariTerlmbat = now()->diffInDays($borrow->dua_date);
-        $denda = $jumlahHariTerlmbat * 10000;
-        $borrow->update([
-            'status' => 'pembayaran_denda',
-            'fine_amount' => $denda
-        ]);
-        return Redirect::back();
-    }
+    // public function denda_pembayaran(Borrow $borrow) {
+    //     $hariIni = now()->startOfDay(); // Menjadi 2026-07-02 00:00:00
+    //     $jumlahHariTerlmbat = $hariIni->diffInDays($borrow->dua_date);
+    //     $denda = abs($jumlahHariTerlmbat * 10000);
+    //     $borrow->update([
+    //         'status' => 'pembayaran_denda',
+    //         'fine_amount' => $denda
+    //     ]);
+    //     return Redirect::back();
+    // }
 }

@@ -18,12 +18,8 @@
         @if ($belumTerlambat)
             <p>Status : {{ $borrow->status }}</p>
         @else
-            <p>Status : Terlambat (Pembayaran Di Denda)</p> <br>
-            <form action="{{ route('denda_pembayaran', $borrow) }}" method="post">
-                @csrf
-                @method('patch')
-                <button type="submit">Denda</button>
-            </form>
+            <p>Status : Terlambat (Pembayaran Di Denda)</p>
+            <p>Denda : Rp{{ number_format($borrow->fine_amount, 0, ',', '.') }}</p>
         @endif
         @if ($borrow->return_date && $borrow->status == 'dipinjam')
             <p>Sudah Di kembalikan pada tanggal {{ $borrow->return_date }}, Silahkan di konfirmasi</p>
