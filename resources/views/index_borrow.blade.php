@@ -12,15 +12,7 @@
         <p>Peminjam : {{ $borrow->user->name }}</p>
         <p>Kode Pinjamam : {{ $borrow->borrow_code }}</p>
         <p>Tanggal Di Pinjam : {{ $borrow->borrow_date }}</p>
-        @php
-            $belumTerlambat = now()->lessThanOrEqualTo($borrow->dua_date);
-        @endphp
-        @if ($belumTerlambat)
-            <p>Status : {{ $borrow->status }}</p>
-        @else
-            <p>Status : Terlambat (Pembayaran Di Denda)</p>
-            <p>Denda : Rp{{ number_format($borrow->fine_amount, 0, ',', '.') }}</p>
-        @endif
+        <p>Status : {{ $borrow->status }}</p>
         @if ($borrow->return_date && $borrow->status == 'dipinjam')
             <p>Sudah Di kembalikan pada tanggal {{ $borrow->return_date }}, Silahkan di konfirmasi</p>
             <form action="{{ route('konfirmasi_kembalian', $borrow) }}" method="post">

@@ -23,7 +23,7 @@ class BorrowController extends Controller
                 'user_id' => $user_id,
                 'borrow_code' => 'TRX-'. time(),
                 'borrow_date' => now()->toDateString(),
-                'dua_date' => now()->addDay(1)->toDateString(),
+                'dua_date' => now()->addDay(7)->toDateString(),
                 'status' => 'dipinjam',
                 'fine_amount' => 0
             ]);

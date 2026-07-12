@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QueueController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -37,3 +38,7 @@ Route::get('/borrow/{borrow}/show', [BorrowController::class, 'show_borrow'])->n
 Route::post('/borrow/{borrow}/return', [BorrowController::class, 'kembalikan'])->name('kembalikan');
 Route::patch('/borrow/{borrow}/konfirmasi', [BorrowController::class, 'konfirmasi_kembalian'])->name('konfirmasi_kembalian');
 Route::patch('/borrow/{borrow}/denda', [BorrowController::class, 'denda_pembayaran'])->name('denda_pembayaran');
+
+Route::get('/profile', [ProfileController::class, 'show_profile'])->name('show_profile');
+Route::get('/profile/edit', [ProfileController::class, 'edit_profile'])->name('edit_profile');
+Route::patch('/profile/edit/update', [ProfileController::class, 'update_profile'])->name('update_profile');
