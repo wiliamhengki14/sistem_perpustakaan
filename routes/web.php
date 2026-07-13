@@ -13,9 +13,12 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+Route::middleware(['admin'])->group(function() {
+    Route::get('/category/create', [CategorieController::class, 'create_category'])->name('create_category');
+    
+});
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/category/create', [CategorieController::class, 'create_category'])->name('create_category');
+
 Route::post('/category/store', [CategorieController::class, 'store_category'])->name('store_category');
 Route::get('/category', [CategorieController::class, 'index_categorie'])->name('index_categorie');
 
