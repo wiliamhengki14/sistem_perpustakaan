@@ -30,12 +30,15 @@
         <button type="submit">Add To Queue</button>
     </form>
     <br>
-    <form action="{{ route('delete_book', $book) }}" method="post">
-        @csrf
-        @method('delete')
-        <button type="submit" onclick="return confirm('apakah ingin di hapus?')">Hapus Buku</button>
-    </form>
-    <a href="{{ route('edit_book', $book) }}">Edit Buku</a> |
+    @if (!Auth::check() || Auth::user()->is_admin)
+        <form action="{{ route('delete_book', $book) }}" method="post">
+            @csrf
+            @method('delete')
+            <button type="submit" onclick="return confirm('apakah ingin di hapus?')">Hapus Buku</button>
+        </form>
+        <a href="{{ route('edit_book', $book) }}">Edit Buku</a> |
+    @endif
+
     <a href="{{ route('index_book') }}">Kembali</a>
 </body>
 </html>

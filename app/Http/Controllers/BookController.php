@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
@@ -44,6 +45,7 @@ class BookController extends Controller
         return Redirect::back();
     }
     public function index_book() {
+        
         $books = Book::all();
         return view('index_book', compact('books'));
     }
