@@ -43,13 +43,21 @@ class BorrowController extends Controller
         }
     }
     public function index_borrow() {
-        $borrows = Borrow::all();
+        $user = Auth::user();
+        if($user->is_admin) {
+            $borrows = Borrow::all();
+        }else {
+            $borrows = Borrow::where('user_id', Auth::id())->get();
+        }
         return view('index_borrow', compact('borrows'));
     }
     public function show_borrow(Borrow $borrow) {
         $user = Auth::user();
-        if($user->is_admin || $user->id) {
+        $user_id = Auth::id();
+        if($user->is_admin || $borrow->user_id == $user_id) {
             return view('show_borrow', compact('borrow'));
+        } else {
+            return Redirect::back();
         }
     }
     public function kembalikan(Borrow $borrow) {

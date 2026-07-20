@@ -28,11 +28,14 @@
             <li>Jumlah : {{ $borrow_detail->qty }}</li>
         </ul>
     @endforeach
+    @if (!Auth::user()->is_admin)
     @if (!$borrow->return_date)
         <form action="{{ route('kembalikan', $borrow) }}" method="post">
             @csrf
             <button type="submit">Kembalikan</button>
         </form>
+    @endif
+        
     @endif
     <br>
     <a href="{{ route('index_borrow') }}">Kembali</a>

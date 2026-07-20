@@ -24,11 +24,13 @@
     <img src="{{ url('storage/'. $book->cover_image) }}" alt="{{ $book->cover_image }}" height="100px">
     <br>
     <br>
+    @if (!Auth::check() || !Auth::user()->is_admin)
     <form action="{{ route('add_to_queue', $book) }}" method="post">
         @csrf
         <input type="number" name="amount" id="amount" value="1" min=1 required>
         <button type="submit">Add To Queue</button>
     </form>
+     @endif
     <br>
     @if (!Auth::check() || Auth::user()->is_admin)
         <form action="{{ route('delete_book', $book) }}" method="post">

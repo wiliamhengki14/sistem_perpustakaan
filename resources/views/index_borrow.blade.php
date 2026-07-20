@@ -14,12 +14,16 @@
         <p>Tanggal Di Pinjam : {{ $borrow->borrow_date }}</p>
         <p>Status : {{ $borrow->status }}</p>
         @if ($borrow->return_date && $borrow->status == 'dipinjam')
-            <p>Sudah Di kembalikan pada tanggal {{ $borrow->return_date }}, Silahkan di konfirmasi</p>
-            <form action="{{ route('konfirmasi_kembalian', $borrow) }}" method="post">
-                @method('patch')
-                @csrf
-                <button type="submit">Konfirmasi Kembalian</button>
-            </form>
+            @if (Auth::user()->is_admin)
+                <p>Sudah Di kembalikan pada tanggal {{ $borrow->return_date }}, Silahkan di konfirmasi</p>
+                <form action="{{ route('konfirmasi_kembalian', $borrow) }}" method="post">
+                    @method('patch')
+                    @csrf
+                    <button type="submit">Konfirmasi Kembalian</button>
+                </form>
+            @else
+                <p>Sudah di kembalikan pada tanggal {{ $borrow->return_date }}</p>
+            @endif
         @endif
         <br>
         <a href="{{ route('show_borow', $borrow) }}">Show Detail</a>

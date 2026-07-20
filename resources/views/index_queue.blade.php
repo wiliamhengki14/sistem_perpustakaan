@@ -29,10 +29,12 @@
         <hr>
     @endforeach
     <br>
-    <form action="{{ route('pinjam') }}" method="post">
-        @csrf
-        <button type="submit">Pinjam</button>
-    </form>
+    @if (!Auth::user()->is_admin)
+        <form action="{{ route('pinjam') }}" method="post">
+            @csrf
+            <button type="submit">Pinjam</button>
+        </form>
+    @endif
     <br>
     <a href="{{ route('index_book') }}">Kembali</a>
 </body>
